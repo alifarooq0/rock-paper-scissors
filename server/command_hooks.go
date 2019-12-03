@@ -11,7 +11,12 @@ import (
 )
 
 const (
-	commandTriggerRPS = "rps"
+	commandTriggerRPS  = "rps"
+	commandTriggerHelp = "help"
+
+	commandHelp = "###### Rock-Paper-Sisccor\n" +
+		"- `/rps @user` - Starts a rock-paper-scissor game with @user.\n" +
+		"- `/rps help` - Show this help text.\n"
 )
 
 func (p *Plugin) registerCommands() error {
@@ -19,7 +24,7 @@ func (p *Plugin) registerCommands() error {
 
 		Trigger:          commandTriggerRPS,
 		AutoComplete:     true,
-		AutoCompleteHint: "<@mention>",
+		AutoCompleteHint: "<@user>",
 		AutoCompleteDesc: "Start a rock paper scissor game.",
 	}); err != nil {
 		return errors.Wrapf(err, "failed to register %s command", commandTriggerRPS)
@@ -39,12 +44,18 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 		}, nil
 	}
 
-	trigger := strings.TrimPrefix(commandSplit[0], "/")
-	switch trigger {
-	case commandTriggerRPS:
-		return p.executeCommandRPS(args, strings.TrimPrefix(commandSplit[1], "@")), nil
-
+	command := commandSplit[1]
+	switch command {
+	case commandTriggerHelp:
+		return &model.CommandResponse{
+			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+			Text:         commandHelp,
+		}, nil
 	default:
+		if command[0] == '@' {
+			return p.executeCommandRPS(args, strings.TrimPrefix(commandSplit[1], "@")), nil
+		}
+
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 			Text:         fmt.Sprintf("Unknown command: " + args.Command),
