@@ -1,5 +1,5 @@
 # Rock-Paper-Scissor ✊ ✋ ✌️
-This plugin makes it easy silence/mute specific users without muting the whole channel.
+This plugin makes it easy to make important decisions in your team ;)
 
 Created as part of [Mattermost Hackathon 2019](https://github.com/mattermost/mattermost-hackathon-nov2019#how-do-i-submit-my-project)
 
